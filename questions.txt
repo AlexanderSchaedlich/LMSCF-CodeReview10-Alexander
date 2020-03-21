@@ -1,0 +1,3 @@
+Why the following doesn't work like in the prework?
+<span class="text-danger"> <?php echo $passError; ?></span>
+error: undefined variable $passError

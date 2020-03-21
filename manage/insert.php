@@ -1,36 +1,5 @@
 <?php 
-
 require_once 'actions/db_connect.php';
-
-$id;
-$currentTitle;
-$currentImage;
-$currentAuthor;
-$currentIsbn;
-$currentDescription;
-$currentDate;
-$currentPublisher;
-$currentType;
-$currentAvailability;
-
-if ($_GET['id']) {
-  $id = $_GET['id'];
-
-  $sql = "SELECT * FROM media WHERE `id` = {$id}" ;
-  $result = $connect->query($sql);
-
-  $row = $result->fetch_assoc();
-
-  $currentTitle = $row['title'];
-  $currentImage = $row['image'];
-  $currentAuthor = $row['fk_author'];
-  $currentIsbn = $row['ISBN'];
-  $currentDescription = $row['short_description'];
-  $currentDate = $row['publish_date'];
-  $currentPublisher = $row['fk_publisher'];
-  $currentType = $row['type'];
-  $currentAvailability = $row['availability'];
-}
 
 $error = false;
 $titleError = '';
@@ -43,7 +12,7 @@ $publisherError = '';
 $typeError = '';
 $availabilityError = '';
 $success = '';
-$updateError = '';
+$insertError = '';
 
 if($_POST) {
   $title = $_POST['title'];
@@ -104,12 +73,11 @@ if($_POST) {
   }
 
   if(!$error){
-    $sql = "update media set title = '$title', image = '$image', fk_author = '$fk_author', ISBN = '$ISBN', short_description = '$short_description', publish_date = '$publish_date', fk_publisher = '$fk_publisher', type = '$type', availability = '$availability'
-    where `id` = {$id}";
+    $sql = "INSERT INTO media (title, image, fk_author, ISBN, short_description, publish_date, fk_publisher, type, availability) VALUES ('$title', '$image', '$fk_author', '$ISBN', '$short_description', '$publish_date', '$fk_publisher', '$type', '$availability')";
     if($connect->query($sql) === TRUE) {
-      $success = 'Updated successfully!' ;
+      $success = 'Inserted successfully!' ;
     } else  {
-      $updateError = 'Error ' . $sql . ' ' . $connect->connect_error;
+      $insertError = 'Error ' . $sql . ' ' . $connect->connect_error;
     }
   }
 
@@ -142,9 +110,9 @@ if($_POST) {
   </nav>
 
   <header>
-    <h1 class="text-center p-5">Update</h1>
+    <h1 class="text-center p-5">Insert</h1>
     <p class="text-center text-success"><?php echo $success; ?></p>
-    <p class="text-center text-success"><?php echo $updateError; ?></p>
+    <p class="text-center text-success"><?php echo $insertError; ?></p>
   </header>
 
   <main>
@@ -154,53 +122,53 @@ if($_POST) {
 
         <div class="col-sm-12 col-md-6 col-lg-6">
           <div class="p-3 bg-dark text-white text-center rounded-lg">
-            <form method="post">
+            <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post">
               <div class="form-group">
                 <label for="newTitle">Title</label>
-                <input type="text" name="title" class="form-control" id="newTitle" value="<?php echo $currentTitle; ?>">
+                <input type="text" name="title" class="form-control" id="newTitle">
                 <span class="text-danger"><?php echo $titleError; ?></span>
               </div>
               <div class="form-group">
                 <label for="newImage">Image</label>
-                <input type="text" name="image" class="form-control" id="newImage" value="<?php echo $currentImage; ?>">
+                <input type="text" name="image" class="form-control" id="newImage">
                 <span class="text-danger"><?php echo $imageError; ?></span>
               </div>
               <div class="form-group">
                 <label for="newImage">Foreign Key Author</label>
-                <input type="text" name="fk_author" class="form-control" id="newImage" value="<?php echo $currentAuthor; ?>">
+                <input type="text" name="fk_author" class="form-control" id="newImage">
                 <span class="text-danger"><?php echo $authorError; ?></span>
               </div>
               <div class="form-group">
                 <label for="newImage">ISBN</label>
-                <input type="text" name="ISBN" class="form-control" id="newImage" value="<?php echo $currentIsbn; ?>">
+                <input type="text" name="ISBN" class="form-control" id="newImage">
                 <span class="text-danger"><?php echo $isbnError; ?></span>
               </div>
               <div class="form-group">
                 <label for="newImage">Short Description</label>
-                <input type="text" name="short_description" class="form-control" id="newImage" value="<?php echo $currentDescription; ?>">
+                <input type="text" name="short_description" class="form-control" id="newImage">
                 <span class="text-danger"><?php echo $descriptionError; ?></span>
               </div>
               <div class="form-group">
                 <label for="newImage">Publish Date</label>
-                <input type="date" name="publish_date" class="form-control" id="newImage" value="<?php echo $currentDate; ?>">
+                <input type="date" name="publish_date" class="form-control" id="newImage">
                 <span class="text-danger"><?php echo $dateError; ?></span>
               </div>
               <div class="form-group">
                 <label for="newImage">Foreign Key Publisher</label>
-                <input type="text" name="fk_publisher" class="form-control" id="newImage" value="<?php echo $currentPublisher; ?>">
+                <input type="text" name="fk_publisher" class="form-control" id="newImage">
                 <span class="text-danger"><?php echo $publisherError; ?></span>
               </div>
               <div class="form-group">
                 <label for="newImage">Type</label>
-                <input type="text" name="type" class="form-control" id="newImage" value="<?php echo $currentType; ?>">
+                <input type="text" name="type" class="form-control" id="newImage">
                 <span class="text-danger"><?php echo $typeError; ?></span>
               </div>
               <div class="form-group">
                 <label for="newImage">Availability</label>
-                <input type="text" name="availability" class="form-control" id="newImage" value="<?php echo $currentAvailability; ?>">
+                <input type="text" name="availability" class="form-control" id="newImage">
                 <span class="text-danger"><?php echo $availabilityError;?></span>
               </div>
-              <button type="submit" class="btn btn-success">Update</button>
+              <button type="submit" class="btn btn-success">Insert</button>
               <a href="../media.php" class="btn btn-primary">Back</a>
             </form>
           </div>
