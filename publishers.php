@@ -40,7 +40,7 @@
 							<div class='p-3'>
 								<div class='row'>
 									<div class='col-3'>
-										<a href='#'>
+										<a href='publishers_media.php?id=" . $row['id'] . "'>
 											<h4>" . $row['name'] . "</h4>
 										</a>
 									</div>

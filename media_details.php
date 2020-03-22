@@ -37,32 +37,49 @@
 			$sql = "select 
 			media.id, media.title, media.image, media.ISBN, media.short_description,
 			media.publish_date, media.type, media.availability,
-			author.name, author.surname,
+			author.f_name, author.l_name,
 			publisher.name 
 			from media
 			inner join author on author.id = media.fk_author
-			inner join publisher on publisher.id = media.publisher
+			inner join publisher on publisher.id = media.fk_publisher
 			where media.id = {$id}";
 			$result = $connect->query($sql);
 
 			$row = $result->fetch_assoc();
+
+			$availability;
+			if($row['availability'] == 0){
+				$availability = "reserved";
+			}elseif($row['availability'] == 1){
+				$availability = "available";
+			}
 			echo "
 				<header>
-					<h1 class='text-center p-5'>" . $row['title'] . "</h1>
+					<h1 class='text-center p-5'>" 
+					. $row['f_name'] . " " . $row['l_name'] . ": "
+					. $row['title'] . "</h1>
 					<img src='" . $row['image'] . "' 
 					alt='" . $row['title'] . "' 
 					style='width: 100%; height: auto;'>
+					<br><br>
 				</header>
 
 				<main>
-					
+					<h5>" . $row['type'] . "</h5>
+					<h5>ISBN: " . $row['ISBN'] . "</h5>
+					<h5>Publisher: " . $row['name'] . "</h5>
+					<h5>Publish Date: " . $row['publish_date'] . "</h5>
+					<h5>Availability: " . $availability . "</h5>
+					<h5>" . $row['short_description'] . "</h5>
+					<br>
+					<a class='btn btn-secondary' href='media.php'>Back</a>
 				</main>
-			";
+			"; 
 		?>
 	</div>
 
 	<footer>
-		<div class="text-center bg-dark text-white p-3">
+		<div class="text-center bg-dark text-white p-3 mt-5">
 			&copy; Big Library 2020
 		</div>
 	</footer>

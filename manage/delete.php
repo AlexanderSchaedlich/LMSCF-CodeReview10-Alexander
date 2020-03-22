@@ -53,7 +53,7 @@
 		<div class="container">
 			<?php 
 				$sql = "select media.id, media.title, media.image, media.short_description, 
-				author.name, author.surname from media
+				author.f_name, author.l_name from media
 				inner join author on author.id = media.fk_author
 				where media.id = {$id}";
 				$result = $connect->query($sql);
@@ -70,7 +70,7 @@
 							</div>
 
 							<div class='col-sm-12 col-md-9 col-lg-9'>
-								<h4>" . $row['name'] . " " . $row['surname'] . ": " 
+								<h4>" . $row['f_name'] . " " . $row['l_name'] . ": " 
 								. $row['title'] . "</h4>
 								<p>" . $row['short_description'] . "</p>
 							</div>
